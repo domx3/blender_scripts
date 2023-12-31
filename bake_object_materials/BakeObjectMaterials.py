@@ -38,7 +38,7 @@ def pre_bake(material, image_texture, metallic_originals, reset_metallic):
 def get_bake_image(material_name, width, height):
     image_name = f"{material_name}_tex"
     image = bpy.data.images.get(image_name)
-    if(image.size[0] != width or image.size[1] != height):
+    if(image and (image.size[0] != width or image.size[1] != height)):
         image.scale(width, height)
     if image is None:
         image = bpy.data.images.new(name=image_name, width=width, height=height, alpha=False)
@@ -55,6 +55,7 @@ def get_bake_texture(material, obj_name, img):
         return img_tex
     
 def bake(context):
+    bpy.context.scene.render.engine = 'CYCLES'
     metallic_originals = {}
     reset_metallic = context.scene.my_props.reset_metallic
     bake_type = context.scene.my_props.my_enum
